@@ -9,7 +9,7 @@ public class ParkingLotTest {
     Object vehicle = null;
 
     @BeforeEach
-    public void setUp() throws ParkingLotException {
+    public void setUp() throws Exception {
         parkingLotSystem = new ParkingLotSystem();
         vehicle = new Object();
     }
@@ -85,6 +85,31 @@ public class ParkingLotTest {
         parkingLotSystem.unPark(vehicle);
         boolean checkEmpty = parkingLotSystem.checkParkingLotFull();
         Assertions.assertFalse(checkEmpty);
+    }
+
+    @Test
+    public void givenWhenParkingLotIsFull_ThenShouldRedirectToSecurityStaff() {
+        try {
+            parkingLotSystem.park(vehicle);
+            if (parkingLotSystem.checkParkingLotFull()) {
+                throw new ParkingLotSignal("PARKING LOT IS FULL");
+            }
+        } catch (ParkingLotException | ParkingLotSignal signal) {
+            Assertions.assertEquals("PARKING LOT IS FULL", signal.getMessage());
+        }
+    }
+
+    @Test
+    public void givenWhenParkingLotHasSpace_ThenInformToOwner() throws ParkingLotException {
+        try {
+            parkingLotSystem.park(vehicle);
+            if (parkingLotSystem.checkParkingLotFull()) {
+                throw new ParkingLotSignal("ALLOWED TO PARK");
+            }
+        } catch (ParkingLotSignal signal) {
+            Assertions.assertEquals("ALLOWED TO PARK", signal.getMessage());
+        }
+
     }
 }
 
