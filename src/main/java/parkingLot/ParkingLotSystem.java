@@ -6,20 +6,21 @@ public class ParkingLotSystem {
 
     private Object vehicle;
 
-    public boolean park(Object vehicle) {
-        if (this.vehicle != null) {
+    public boolean park(Object vehicle) throws ParkingLotException {
+        if (this.vehicle == null) {
             this.vehicle = vehicle;
             return true;
         }
-        return false;
+        throw new ParkingLotException("Parking is filled");
     }
 
-    public boolean unPark(Object vehicle) {
+    public boolean unPark(Object vehicle) throws ParkingLotException{
         if (vehicle == null) return false;
         if (this.vehicle.equals(vehicle)) {
             this.vehicle = null;
             return true;
         }
-        return false;
+       throw new ParkingLotException("Vehicle is not parked");
     }
+
 }
