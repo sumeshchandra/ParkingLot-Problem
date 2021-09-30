@@ -14,13 +14,16 @@ public class ParkingLotSystem {
         throw new ParkingLotException("Parking is filled");
     }
 
-    public boolean unPark(Object vehicle) throws ParkingLotException{
+    public boolean unPark(Object vehicle) throws ParkingLotException {
         if (vehicle == null) return false;
         if (this.vehicle.equals(vehicle)) {
             this.vehicle = null;
             return true;
         }
-       throw new ParkingLotException("Vehicle is not parked");
+        throw new ParkingLotException("Vehicle is not parked");
     }
 
+    public boolean checkParkingLotFull() {
+        return this.vehicle != null;
+    }
 }

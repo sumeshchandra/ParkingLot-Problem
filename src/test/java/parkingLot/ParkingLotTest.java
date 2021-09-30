@@ -9,7 +9,7 @@ public class ParkingLotTest {
     Object vehicle = null;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() throws ParkingLotException {
         parkingLotSystem = new ParkingLotSystem();
         vehicle = new Object();
     }
@@ -65,6 +65,27 @@ public class ParkingLotTest {
         }
     }
 
+    @Test
+    public void givenNoVehicle_whenUnParkingVehicle_shouldReturnFalse() throws ParkingLotException {
+        parkingLotSystem.park(new Object());
+        boolean unParked = parkingLotSystem.unPark(vehicle);
+        Assertions.assertFalse(unParked);
+    }
+
+    @Test
+    public void givenAVehicle_WhenNotFUll_ThenShouldReturnTrue() throws ParkingLotException {
+        parkingLotSystem.park(vehicle);
+        boolean checkFull = parkingLotSystem.checkParkingLotFull();
+        Assertions.assertTrue(checkFull);
+    }
+
+    @Test
+    public void givenALot_WhenFull_ThenShouldReturnTrue() throws ParkingLotException {
+        parkingLotSystem.park(vehicle);
+        parkingLotSystem.unPark(vehicle);
+        boolean checkEmpty = parkingLotSystem.checkParkingLotFull();
+        Assertions.assertFalse(checkEmpty);
+    }
 }
 
 
