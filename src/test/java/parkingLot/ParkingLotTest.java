@@ -9,7 +9,7 @@ public class ParkingLotTest {
     Object vehicle = null;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() throws Exception{
         parkingLotSystem = new ParkingLotSystem();
         vehicle = new Object();
     }
