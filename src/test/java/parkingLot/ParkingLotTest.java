@@ -10,8 +10,8 @@ public class ParkingLotTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        parkingLotSystem = new ParkingLotSystem();
         vehicle = new Object();
+        parkingLotSystem = new ParkingLotSystem(1);
     }
 
     @Test
@@ -47,7 +47,7 @@ public class ParkingLotTest {
 
     @Test
     public void given2Vehicle_WhenParked_ThenShouldReturnTrue() {
-        parkingLotSystem = new ParkingLotSystem();
+        parkingLotSystem = new ParkingLotSystem(1);
         try {
             Assertions.assertTrue(parkingLotSystem.park(new Object()));
         } catch (ParkingLotException e) {
@@ -57,7 +57,7 @@ public class ParkingLotTest {
 
     @Test
     void givenParkingLotWithOneCapacity_WhenWePark_ThenShouldBeAbleToPark() {
-        ParkingLotSystem parkingLot = new ParkingLotSystem();
+        ParkingLotSystem parkingLot = new ParkingLotSystem(1);
         try {
             Assertions.assertTrue(parkingLot.park(new Object()));
         } catch (ParkingLotException e) {
@@ -88,6 +88,32 @@ public class ParkingLotTest {
     }
 
     @Test
+    public void givenAVehicle_WhenParkingLotIsFilled_ShouldInformTheOwner() {
+        parkingLotOwner owner = new parkingLotOwner();
+        parkingLotSystem.registerParkingLotObserver(owner);
+        try {
+            parkingLotSystem.park(vehicle);
+            parkingLotSystem.park(new Object());
+        } catch (ParkingLotException e) {
+        }
+        boolean capacityFull = owner.isCapacityFull();
+        Assertions.assertTrue(capacityFull);
+    }
+
+    @Test
+    public void givenCapacityIs2_ShouldBeAbleToPark2Vehicle() {
+        Object vehicle2 = new Object();
+        parkingLotSystem.setCapacity(2);
+        try {
+            parkingLotSystem.park(vehicle);
+            parkingLotSystem.park(vehicle2);
+            boolean isParked1 = parkingLotSystem.isVehicleParked(vehicle);
+            boolean isParked2 = parkingLotSystem.isVehicleParked(vehicle2);
+            Assertions.assertTrue(isParked1 && isParked2);
+        } catch (ParkingLotException e) { }
+    }
+
+    @Test
     public void givenWhenParkingLotIsFull_ThenShouldRedirectToSecurityStaff() {
         try {
             parkingLotSystem.park(vehicle);
@@ -97,6 +123,20 @@ public class ParkingLotTest {
         } catch (ParkingLotException | ParkingLotSignal signal) {
             Assertions.assertEquals("PARKING LOT IS FULL", signal.getMessage());
         }
+    }
+
+    @Test
+    public void givenWhenParkingLotIsFull_ShouldInformToSecurity() {
+
+        AirportSecurity airportSecurity = new AirportSecurity();
+        parkingLotSystem.registerParkingLotObserver(airportSecurity);
+        try {
+            parkingLotSystem.park(vehicle);
+            parkingLotSystem.park(new Object());
+        } catch (ParkingLotException e) {
+        }
+        boolean capacityFull = airportSecurity.isCapacityFull();
+        Assertions.assertTrue(capacityFull);
     }
 
     @Test
